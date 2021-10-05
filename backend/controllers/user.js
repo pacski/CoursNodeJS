@@ -1,9 +1,7 @@
 const bcrypt = require('bcryptjs')
 const { request } = require('../app')
 const User = require('./../models/user')
-const Token = require('./../models/token')
 const jsontoken = require('jsonwebtoken')
-
 exports.signup = (req,res,next) =>{
     console.log('begin sign')
 
@@ -18,10 +16,17 @@ exports.signup = (req,res,next) =>{
                 .then(()=> res.status(201).json({message: 'create user'}))
                 .catch(error=> res.status(400).json({error}))
         })
-        .catch(error=> res.status(500).json({error}))
+        .catch(error => {
+        if (!error.response) {
+            // network error
+            this.errorStatus = 'Error: Network Error';
+        } else {
+            this.errorStatus = error.response.data.message;
+        }
+      })
 }
 
-exports.login = (req,res,next) => {
+exports.login = (req, res, next) => {
     User.findOne({email: req.body.email})
         .then(user=>{
             if(!user){
@@ -41,10 +46,4 @@ exports.login = (req,res,next) => {
                 })
                 .catch(error=> res.status(500).json({error}))
         })
-}
-exports.createToken = (req,res,next) => {
-  const user = new User({
-                userId:req.body.userId,
-                token: req.body.token
-            })  
 }

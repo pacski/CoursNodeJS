@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+var cors = require('cors')
 //const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const Post = require('./models/post')
@@ -20,11 +21,22 @@ app.use('/',(req, res,next) =>{
     res.json({message: "oklm"})
 })*/
 app.use((req,res,next)=> {
-    res.setHeader('Access-Control-Allow-Origin','*')
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080')
     res.setHeader('Access-Control-Allow-Headers', 'Origin,X-Requested-With,Content,Accept,Content-Type,Authorization')
     res.setHeader('Access-Control-Allow-Methods','GET,POST,PUT,DELETE')
     next()
 })
+
+var corsOptions = {
+    origin: ["http://localhost:8080"],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+    optionsSuccessStatus: 201, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    allowedHeaders: 'Content-Type,Authorization, x-xsrf-token, Access-Control-Allow-Origin',
+    exposedHeaders: 'Content-Range,X-Content-Range, Accept-Ranges, Content-Encoding, Content-Length, Content-Range'
+}
+
+app.use(cors(corsOptions));
 
 app.use(express.json())
 app.use(express.urlencoded({
