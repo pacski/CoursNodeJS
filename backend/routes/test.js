@@ -4,7 +4,6 @@ const postController = require('./../controllers/test')
 const auth = require('../middleware/auth')
 const multer = require('../middleware/multer-config')
 
-console.log("test route")
 router.post('/',multer,postController.createPost)
 router.put('/:id',multer,postController.updatePostId)
 router.delete('/:id',postController.deletePostId)

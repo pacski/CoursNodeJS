@@ -20,7 +20,6 @@ const actions = {
     if (res.status === 200) {
       commit("setUser", res.data)
     }
-    console.log('res:', res)
   },
 
   async LogOut({ commit }) {
