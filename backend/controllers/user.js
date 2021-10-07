@@ -2,6 +2,8 @@ const bcrypt = require('bcryptjs')
 const { request } = require('../app')
 const User = require('./../models/user')
 const jsontoken = require('jsonwebtoken')
+const app = require('../app')
+const user = require('./../models/user')
 exports.signup = (req,res,next) =>{
     console.log('begin sign')
 
@@ -46,4 +48,21 @@ exports.login = (req, res, next) => {
                 })
                 .catch(error=> res.status(500).json({error}))
         })
+}
+
+exports.show = (req, res, next) => {
+    User.findOne({ _id: req.body.userId })
+        .then(user => {
+            if (!user) {
+                return res.status(401).json({error: 'pas trouvé'})
+            }
+            res.status(200).json(user)
+        })
+    .catch(error => res.status(500).json({error: error}))  
+}
+
+exports.update = (req,res,next)=>{
+    User.updateOne({_id: req.params.id},{...req.body, _id: req.params.id})
+        .then(()=> res.status(200).json({message: 'ok'}))
+        .catch(()=> res.status(400).json({ error}))
 }

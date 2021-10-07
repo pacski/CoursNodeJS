@@ -7,7 +7,12 @@ const state = {
 
 const getters = {
   isAuthenticated: (state) => !!state.userId && !!state.token,
-  StateUser: (state) => state.user,
+  StateUser: function (state) {
+    return {
+      userId: state.userId,
+      token: state.token,
+    }
+  }
 };
 
 const actions = {
@@ -29,8 +34,8 @@ const actions = {
 
 const mutations = {
   setUser(state, data) {
-    state.token = data.userId;
-    state.userId = data.token;
+    state.token = data.token;
+    state.userId = data.userId;
   },
 
 
