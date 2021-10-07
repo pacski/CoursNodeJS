@@ -5,7 +5,7 @@ const jsontoken = require('jsonwebtoken')
 const server = require('../server')
 
 exports.list = (req, res, next) => {
-    Message.find()
+    Message.find().populate('owner')
         .then((messages) => {
             if (messages) {
                 res.status(200).json(messages)
