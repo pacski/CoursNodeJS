@@ -1,16 +1,11 @@
 <template>
   <div class="home">
-    <h1>Home</h1>
-    <h3>my groups</h3>
+    <h1>Groups</h1>
     <div>
       <div v-bind:key="group._id" v-for="group in groups">
         <p>name : {{group.name}}</p>
+        <p>owner : {{group.owner[0].username}}</p>
       </div>
-    </div>
-    <h3>add a group</h3>
-    <div>
-      <input type="text" v-model="form.name">
-      <button @click="createGroup()">Add</button>
     </div>
   </div>
 </template>
@@ -22,32 +17,18 @@ export default {
     return {
       groupService: new groupService(),
       groups: [],
-      form:{
-        name: null
-      }
     }
   },
   mounted() {
-    this.listOwnGroup()
+    this.listGroup()
     .then((res)=>{
-      console.log('res:', res.data)
       this.groups = res.data
     })
   },
   methods: {
-    listOwnGroup(){
-      return this.groupService.listOwnGroup()
+    listGroup(){
+      return this.groupService.list()
     },
-    createGroup(){
-      let dataForm = {
-        name: this.form.name
-      }
-      this.groupService.create(dataForm)
-      .then(()=>{
-        this.groups.push(dataForm)
-        this.form.name = null
-      })
-    }
   },
 }
 </script>

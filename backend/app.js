@@ -2,10 +2,10 @@ const express = require('express')
 const app = express()
 var cors = require('cors')
 const mongoose = require('mongoose')
-const Post = require('./models/post')
 const port = 2500
 const userRoutes = require('./routes/user')
 const messengerRoutes = require('./routes/message')
+const groupRoutes = require('./routes/group')
 const path = require('path')
 require('dotenv').config()
 mongoose.connect('mongodb+srv://pacski:'+process.env.PASSWORD+'@backendnodejs.4ecle.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
@@ -44,5 +44,6 @@ app.use(express.urlencoded({
 app.use('/images',express.static(path.join(__dirname,'images')))
 app.use('/user',userRoutes)
 app.use('/messenger', messengerRoutes)
+app.use('/group', groupRoutes)
 
 module.exports = app

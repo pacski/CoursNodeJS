@@ -2,6 +2,7 @@
   <div id="nav">
     <span v-if="isLoggedIn">
     <router-link to="/home">Home</router-link> |
+    <router-link to="/group">Group</router-link> |
     <router-link to="/account">Account</router-link> |
     <router-link to="/trainings">Trainings</router-link> |
     <router-link to="/messenger">Messenger</router-link> |

@@ -14,6 +14,12 @@ const routes = [
     meta: {requiresAuth: true}
   },
   {
+    path: '/group',
+    name: 'Group',
+    component: () => import("../views/Group/Index.vue"),
+    meta: {requiresAuth: true}
+  },
+  {
     path: '/login',
     name: 'login',
     component: Login,
