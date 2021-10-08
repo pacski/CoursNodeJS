@@ -18,15 +18,7 @@ exports.listOwnGroup = (req, res, next) => {
 exports.list = (req, res, next) => {
     Group.find()
         .populate('owner')
-        // .where('groupMembers.userId').ne(req.body.userId)
-        // .exec(function (err, Group) {
-        //     Group = Group.filter(function (Group) {
-        //         console.log('Group.groupMembers.userId:', Group.groupMembers.userId)
-        //         console.log('req.body.userId:', req.body.userId)
-        //         return Group.groupMembers.userId == req.body.userId;
-        //     })
-        //     res.status(200).json(Group)
-        // })
+        .populate('groupMembers')
         .then((messages) => {
             if (messages) {
                 res.status(200).json(messages)

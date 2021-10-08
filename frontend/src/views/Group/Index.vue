@@ -3,10 +3,13 @@
     <h1>Groups</h1>
     <div>
       <div v-bind:key="group._id" v-for="(group, index) in groups">
-        <p>name : {{group.name}}</p>
-        <p>owner : {{group.owner[0].username}}</p>
-        <p>city : {{group.owner[0].city}}</p>
-        <button v-if="!isOwner(group.userId)" @click="joinGroup(group._id, index)">Join</button>
+        <div v-if="!isOwner(group.userId) && !isInGroup(group.groupMembers)">
+          <p>name : {{group.name}}</p>
+          <p>owner : {{group.owner[0].username}}</p>
+          <p>city : {{group.owner[0].city}}</p>
+          <p>nb membre : {{group.groupMembers.length}}</p>
+          <button @click="joinGroup(group._id, index)">Join</button>
+        </div>
       </div>
     </div>
   </div>
@@ -42,6 +45,22 @@ export default {
         return this.$store.getters.StateUser.userId === ownerId
       }
     },
+    isInGroup(){
+      return groupMembers =>{  
+        var count = 0 
+        for(let groupMember of groupMembers)  {
+          console.log('Object.values(groupMember).indexOf(this.$store.getters.StateUser.userId) > -1:', Object.values(groupMember).indexOf(this.$store.getters.StateUser.userId) > -1)
+          if (Object.values(groupMember).indexOf(this.$store.getters.StateUser.userId) > -1) {
+            return true
+          }else{
+            if(count === groupMembers.length){
+              return false
+            }
+          }
+          count +1
+        }
+      }
+    }
   },
   methods: {
     listGroup(){
