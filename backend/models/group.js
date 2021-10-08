@@ -12,6 +12,12 @@ groupSchema.virtual('owner', {
    foreignField: '_id', // is equal to foreignField
 });
 
+groupSchema.virtual('groupMembers', {
+   ref: 'GroupMember', //The Model to use
+   localField: '_id', //Find in Model, where localField 
+   foreignField: 'groupId', // is equal to foreignField
+});
+
 groupSchema.set('toObject', { virtuals: true });
 groupSchema.set('toJSON', { virtuals: true });
 module.exports = mongoose.model('Group', groupSchema)

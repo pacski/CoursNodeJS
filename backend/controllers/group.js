@@ -3,10 +3,12 @@ const { request } = require('../app')
 const Group = require('./../models/group')
 const jsontoken = require('jsonwebtoken')
 const server = require('../server')
+const groupMember = require('../models/groupMember')
 
 exports.listOwnGroup = (req, res, next) => {
-    console.log('req.body.userId:', req.body.userId)
-    Group.find({userId: req.body.userId}).populate('owner')
+    Group.find({ userId: req.body.userId })
+        .populate('owner')
+        .populate({ path: 'groupMembers', populate: {path: 'owner'}})
         .then((messages) => {
             if (messages) {
                 res.status(200).json(messages)
@@ -14,7 +16,17 @@ exports.listOwnGroup = (req, res, next) => {
     })
 }
 exports.list = (req, res, next) => {
-    Group.find().populate('owner')
+    Group.find()
+        .populate('owner')
+        // .where('groupMembers.userId').ne(req.body.userId)
+        // .exec(function (err, Group) {
+        //     Group = Group.filter(function (Group) {
+        //         console.log('Group.groupMembers.userId:', Group.groupMembers.userId)
+        //         console.log('req.body.userId:', req.body.userId)
+        //         return Group.groupMembers.userId == req.body.userId;
+        //     })
+        //     res.status(200).json(Group)
+        // })
         .then((messages) => {
             if (messages) {
                 res.status(200).json(messages)
