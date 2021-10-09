@@ -60,9 +60,6 @@ export default {
     .then((res)=>{
       if(res.data.length > 0){
         this.joinedGroups = res.data
-        console.log('res.data:', res.data)
-        console.log('res.data:', res.data[0].owner[0].username)
-
       }
     })
   },
@@ -93,7 +90,6 @@ export default {
     quitGroup(id, index){
       this.groupMemberService.quit(id)
       .then((res)=>{
-        console.log('res:', res)
         this.joinedGroups.splice(index, 1)
       })
     }

@@ -52,8 +52,6 @@ export default {
         this.show()
         .then((res)=>{
             this.user = res.data
-        console.log('res:', res)
-
         })
     },
     methods: {

@@ -22,7 +22,6 @@ class groupMemberService{
     async quit(id) {
         this.body['userId'] = this.userId
         this.body['groupId'] = id
-        console.log('this.body:', this.body)
         return await axios.post('/groupMember/quit', this.body, this.headers)
     }
 }

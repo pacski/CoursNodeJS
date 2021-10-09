@@ -15,8 +15,6 @@ class userService{
     async update(body) {
         this.body['userId'] = this.userId
         this.body = body
-        console.log('this.userId:', this.userId)
-        console.log('this.body :', this.body )
         return await axios.patch('/user/update/'+this.userId, this.body, this.headers)
     }
 }

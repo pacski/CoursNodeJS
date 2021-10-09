@@ -51,9 +51,7 @@ export default {
     const socket = io("http://localhost:2500/");
     this.socket = socket
     socket.on('receiveMessage', (message)=>{
-      console.log('message:', message.body)
       this.receiveMessage(message)
-
     })
   },
   mounted() {
@@ -95,7 +93,7 @@ export default {
       })
     },
     receiveMessage(message){
-      console.log('receiveMessage:', 'fdfdf')
+      console.log('receiveMessage:', message)
       this.messages.push(message)
     },
     deleteMessage(id, index){
