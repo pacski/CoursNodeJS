@@ -48,25 +48,12 @@ export default {
     },
   },
   created() {
-    // const socket = io("http://localhost:2500/");
-    const socket = io.connect('http://localhost:2500/');
+    const socket = io("http://localhost:2500/");
     this.socket = socket
-    socket.on('connection', (socket)=>{
-      socket.on('receiveMessage', (message)=>{
-        console.log('toto:' + message)
-      })
-      socket.on('test', (message)=>{
-        console.log('message:', message)
-      })
-    })
     socket.on('receiveMessage', (message)=>{
-      console.log(message)
+      console.log('message:', message.body)
       this.receiveMessage(message)
-      console.log('tata:' + message)
-    })
 
-    socket.on('test', (message)=>{
-      console.log('message:', message)
     })
   },
   mounted() {
@@ -99,9 +86,9 @@ export default {
         ]
       }
       this.messageService.create(dataForm)
-      .then(()=>{
+      .then((res)=>{
         this.form.body = null
-        this.socket.emit('newMessage', dataForm)
+        this.socket.emit('newMessage', res.data)
       })
       .catch((err)=>{
         console.log('err:', err)

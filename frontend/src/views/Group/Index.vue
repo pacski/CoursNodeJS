@@ -8,6 +8,7 @@
           <p>owner : {{group.owner[0].username}}</p>
           <p>city : {{group.owner[0].city}}</p>
           <p>nb membre : {{group.groupMembers.length}}</p>
+          <p>speed average : {{speedAverage(group.groupMembers)}}</p>
           <button @click="joinGroup(group._id, index)">Join</button>
         </div>
       </div>
@@ -49,7 +50,6 @@ export default {
       return groupMembers =>{  
         var count = 0 
         for(let groupMember of groupMembers)  {
-          console.log('Object.values(groupMember).indexOf(this.$store.getters.StateUser.userId) > -1:', Object.values(groupMember).indexOf(this.$store.getters.StateUser.userId) > -1)
           if (Object.values(groupMember).indexOf(this.$store.getters.StateUser.userId) > -1) {
             return true
           }else{
@@ -58,6 +58,19 @@ export default {
             }
           }
           count +1
+        }
+      }
+    },
+    speedAverage(){
+      return groupMembers =>{  
+        if(groupMembers.length > 0){
+          var total = 0
+          groupMembers.forEach(element => {
+            total += element.owner[0].speed   
+          })
+          return total / groupMembers.length
+        }else{
+          return 0
         }
       }
     }

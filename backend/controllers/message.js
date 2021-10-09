@@ -19,7 +19,7 @@ exports.create = (req, res, next) => {
         ...messageObject,
     })
     p.save()
-        .then(() => res.status(201).json({ message: 'ok' }))
+        .then(() => res.status(201).json(p))
         .catch(error => res.status(400).json({ error}))
 }
 exports.delete = (req, res, next) => {

@@ -18,7 +18,12 @@ exports.listOwnGroup = (req, res, next) => {
 exports.list = (req, res, next) => {
     Group.find()
         .populate('owner')
-        .populate('groupMembers')
+        .populate({
+            path : 'groupMembers',
+            populate : {
+                path : 'owner'
+            }
+        })
         .then((messages) => {
             if (messages) {
                 res.status(200).json(messages)

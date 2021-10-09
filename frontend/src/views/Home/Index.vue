@@ -21,12 +21,13 @@
     </div>
     <div>
       <h3>my joined groups</h3>
-      <div v-bind:key="joinedGroup.group[0]._id" v-for="(joinedGroup, index) in joinedGroups">
+      <div v-bind:key="joinedGroup.id" v-for="(joinedGroup, index) in joinedGroups">
         <p>name : {{joinedGroup.group[0].name}}</p>
         <div>
           <h4>members :</h4>
-          <div v-bind:key="groupMember._id" v-for="groupMember in joinedGroup.group[0].groupMembers">
-            <p v-text="groupMember.owner[0].username"></p>
+          <div v-bind:key="groupMember._id" v-for="groupMember in joinedGroup.group">
+            <p v-if="!isOwner(groupMember.groupMembers[0].owner[0]._id)" v-text="groupMember.groupMembers[0].owner[0].username"></p>
+            <p v-else>Me</p>
           </div>
           <button v-if="!isOwner(joinedGroup.group[0].userId)" @click="quitGroup(joinedGroup.group[0]._id, index)">Quit</button>
         </div>
@@ -57,7 +58,12 @@ export default {
     })
     this.listGroup()
     .then((res)=>{
-      this.joinedGroups = res.data
+      if(res.data.length > 0){
+        this.joinedGroups = res.data
+        console.log('res.data:', res.data)
+        console.log('res.data:', res.data[0].owner[0].username)
+
+      }
     })
   },
   computed:{

@@ -7,7 +7,15 @@ const server = require('../server')
 exports.list = (req, res, next) => {
     GroupMember.find({userId: req.body.userId})
         .populate('owner')
-        .populate('group')
+        .populate({
+            path: 'group',
+            populate: {
+                path: 'groupMembers',
+                populate: {
+                    path: 'owner',
+                }
+            }
+        })
         .then((messages) => {
             if (messages) {
                 res.status(200).json(messages)
