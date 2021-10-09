@@ -14,6 +14,9 @@ exports.list = (req, res, next) => {
                 populate: {
                     path: 'owner',
                 }
+            },
+            populate: {
+                path: 'owner'
             }
         })
         .then((messages) => {

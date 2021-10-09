@@ -1,21 +1,32 @@
 <template>
   <div class="home">
     <h1>Groups</h1>
-    <div>
+    <div class="cards">
       <div v-bind:key="group._id" v-for="(group, index) in groups">
         <div v-if="!isOwner(group.userId) && !isInGroup(group.groupMembers)">
-          <p>name : {{group.name}}</p>
-          <p>owner : {{group.owner[0].username}}</p>
-          <p>city : {{group.owner[0].city}}</p>
-          <p>nb membre : {{group.groupMembers.length}}</p>
-          <p>speed average : {{speedAverage(group.groupMembers)}}</p>
-          <button @click="joinGroup(group._id, index)">Join</button>
+          <b-card :title="group.name" header-tag="header" footer-tag="footer">
+            <template #header>
+              <h6 class="mb-0">{{group.owner[0].city}} <b-icon-signpost></b-icon-signpost></h6>
+            </template>
+          <b-card-text>{{group.description}}</b-card-text>
+          <b-card-text>{{speedAverage(group)}} <b-icon-lightning></b-icon-lightning></b-card-text>
+          <b-button href="#" variant="primary" @click="joinGroup(group._id, index)">Join</b-button>
+            <template #footer>
+              <em>{{group.groupMembers.length + 1}} <b-icon-person-fill></b-icon-person-fill></em>
+            </template>
+          </b-card>
         </div>
+        <br>
       </div>
     </div>
   </div>
 </template>
-
+<style>
+.cards{
+  width: 40%;
+  margin: auto;
+}
+</style>
 <script>
 import {groupService} from '../../services/group'
 import {groupMemberService} from '../../services/groupMember'
@@ -62,15 +73,15 @@ export default {
       }
     },
     speedAverage(){
-      return groupMembers =>{  
-        if(groupMembers.length > 0){
-          var total = 0
-          groupMembers.forEach(element => {
-            total += element.owner[0].speed   
+      return group =>{  
+        if(group.groupMembers.length > 0){
+          var total = group.owner[0].speed
+          group.groupMembers.forEach(element => {
+            total += element.owner[0].speed ? element.owner[0].speed : 0  
           })
-          return total / groupMembers.length
+          return total / group.groupMembers.length
         }else{
-          return 0
+          return group.owner[0].speed
         }
       }
     }

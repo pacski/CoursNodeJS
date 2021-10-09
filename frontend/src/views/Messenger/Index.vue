@@ -1,25 +1,85 @@
 <template>
   <div>
       <h1>Messagerie</h1>
-      <div>
-        <div v-bind:key="message._id" v-for="(message, index) in messages">
-          <p v-text="message.createdAt"></p>
-          <p v-text="message.owner[0].username ? message.owner[0].username  : 'unknown'"></p>
-          <p v-text="message.body"></p>
-          <button v-if="isOwner(message.autor)" @click="deleteMessage(message._id,index)">delete</button>
-          <button v-if="isOwner(message.autor)" @click="switchEditingMode(message._id, index)">Edit</button>
-          <div v-if="editingMode && message._id === selectedMessage">
-            <input type="text" v-model="form.body" :placeholder="message.body">
-            <input type="submit" @click="updateMessage(selectedMessage)" value="Update">
+      <div class="tchat">
+        <div class="message" v-bind:class="isOwner(message.autor) ?'own-message' :''" v-bind:key="message._id" v-for="(message, index) in messages">
+          <div class="head">
+            <p v-text="message.createdAt"></p>
+            <p v-text="message.owner[0].username ? message.owner[0].username  : 'unknown'"></p>
+          </div>
+          <div class="body">
+            <p v-if="!editingMode" v-text="message.body"></p>
+            <textarea v-if="editingMode && message._id === selectedMessage" v-model="form.body" :placeholder="message.body"></textarea>
+          </div>
+          <div class="foot">
+            <strong  v-if="isOwner(message.autor) && !editingMode" @click="deleteMessage(message._id,index)">Delete</strong>
+            <strong v-if="isOwner(message.autor) && !editingMode" @click="switchEditingMode(message._id, index)">Edit</strong>
+            <strong v-if="editingMode && message._id === selectedMessage" @click="updateMessage(selectedMessage)" >Update</strong>
           </div>
         </div>
       </div>
-      <div v-if="!editingMode">
-        <input type="text" v-model="form.body">
-        <input type="submit" @click="createMessage()">
+      <div v-if="!editingMode && dataIsLoaded">
+        <div class="tchat-form">
+          <textarea v-model="form.body" ></textarea>
+          <div class="tchat-send-btn" @click="createMessage()">Envoyer</div>
+        </div>
       </div>
   </div>
 </template>
+<style>
+.tchat{
+  width: 80%;
+  margin: auto;
+}
+.tchat-form{
+  display: flex;
+}
+.tchat-send-btn{
+  width: 10%;
+  height: 60px;
+  line-height: 60px;
+  background: grey;
+  margin: auto;
+  border: solid;
+}
+textarea{
+  width: 90%;
+  height: 60px;
+  border: solid;
+  overflow: auto;
+  outline: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  resize: none; 
+}
+.message{
+  border: solid;
+  display: flex;
+  flex-direction: column;
+  margin: 15px;
+  width: 50%;
+  position: relative;
+  border-radius: 15px;
+}
+.own-message{
+  left: 50%;
+  background: grey;
+}
+.message, .head, .foot{
+  display: flex;
+}
+.head{
+  justify-content: space-between;
+  padding: 10px;
+}
+.foot{
+  justify-content: flex-end;
+}
+.foot strong{
+  margin: 10px;
+}
+</style>
 <script>
 import {io} from "socket.io-client";
 import {messageService} from '../../services/message'
@@ -31,6 +91,7 @@ export default {
       form: {
         body: null
       },
+      dataIsLoaded: false,
       socket: null,
       messageService: new messageService(),
       userService: new userService(),
@@ -57,6 +118,7 @@ export default {
   mounted() {
       this.listMessage()
       .then((res)=>{
+        this.dataIsLoaded = true
         this.messages = res.data
       })
 
